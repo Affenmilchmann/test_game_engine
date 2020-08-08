@@ -1,0 +1,39 @@
+CFLAGS=-c -Wall
+CC=g++
+SFML=-lsfml-graphics -lsfml-window -lsfml-system
+
+debug: dcompile
+	gdbgui run
+dcompile: dmain.o dSession.o dLevel.o
+	$(CC) dmain.o dSession.o dLevel.o -o run $(SFML)
+
+dmain.o: main.cpp
+	$(CC) -g $(CFLAGS) main.cpp -o dmain.o
+	
+dSession.o: Session.cpp
+	$(CC) -g $(CFLAGS) Session.cpp -o dSession.o
+	
+dLevel.o: Level.cpp
+	$(CC) -g $(CFLAGS) Level.cpp -o dLevel.o
+
+
+
+
+run: compile
+	./run
+	
+compile: main.o Session.o Level.o
+	$(CC) main.o Session.o Level.o -o run $(SFML)
+
+main.o: main.cpp
+	$(CC) $(CFLAGS) main.cpp
+	
+Session.o: Session.cpp
+	$(CC) $(CFLAGS) Session.cpp
+	
+Level.o: Level.cpp
+	$(CC) $(CFLAGS) Level.cpp
+	
+clean:
+	rm -rf *.o main
+	rm -f run
