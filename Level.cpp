@@ -20,12 +20,6 @@ void Level::drawLevelFrame(sf::RenderWindow* window)
 
 void Level::level_tick(sf::Vector2i* mouse_position, bool is_left_mouse_pressed)
 {
-	DB("im here");
-	if (is_left_mouse_pressed)
-		DB("Yes");
-	else
-		DB("No");
-
 	if (is_left_mouse_pressed)
 		level_sprites[0].setPosition((float)mouse_position->x, (float)mouse_position->y);
 }

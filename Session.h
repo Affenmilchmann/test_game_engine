@@ -3,11 +3,17 @@
 #include "Level.h"
 
 #include <list>
-#include <time.h>
+#include <chrono>
 #include <iostream>
 #include <string>
+#include <math.h> 
 
-#define DB(x) std::cout << x << std::endl
+#ifdef __linux__ 
+#include <unistd.h>
+#endif
+#ifdef WINDOWS
+#include <windows.h>
+#endif
 
 class Session
 {
@@ -23,22 +29,25 @@ private:
 	//debug
 	sf::Text fps_label;
 	sf::Text mouse_coords_label;
+	sf::Text timer_label;
+	sf::Text tick_time_label;
+	
 	sf::Font pixel_font;
 	
-	
 	//Settings
-	int FPS_border = 1;
+	int FPS_border = 60;
+	double base_ticks_time = 0.01f; // 1/100
 	
-	//Things to count tick time
-	float tick_time;
-	clock_t KE_timer;
+	//Things to count time
+	double tick_time;
+	int seconds;
 
 	//Things to count ticks
 	int tick_count;
 	
 	//Things to count fps
-	float one_second_timer;
-	float frame_passed_time_count;
+	double one_second_timer;
+	double frame_passed_time_count;
 	int fps;
 	
 	//loop for code there
@@ -50,6 +59,7 @@ private:
 	void levelTick();
 	void mouseHandler();
 	void showDebug();
+	void sleep();
 	
 	
 	//scoring functions
@@ -58,6 +68,11 @@ private:
 	void fpsCount();
 	void tickTimeCount();
 	void tickAmountCount();
+	
+	//init funcs
+	void fontsInit();
+	void countersInit();
+	void windowInit(int w, int h);
 public:
 	Session(int w, int h);
 	~Session();

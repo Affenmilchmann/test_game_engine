@@ -9,9 +9,6 @@
 class Level
 {
 private:
-	/*std::list<sf::Texture> level_textures;
-	std::list<sf::Sprite> level_sprites;*/
-	
 	sf::Texture* level_textures;
 	sf::Sprite* level_sprites;
 	
