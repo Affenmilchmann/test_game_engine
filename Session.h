@@ -57,6 +57,7 @@ private:
 	//main functions
 	void drawFrame();
 	void levelTick();
+	void eventHandler();
 	void mouseHandler();
 	void showDebug();
 	void sleep();

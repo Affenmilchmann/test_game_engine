@@ -14,14 +14,9 @@ Session::Session(int w, int h)
 void Session::mainLoop()
 {
 	while (main_window.isOpen())
-	{
-		sf::Event event;
-		while (main_window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-			main_window.close();
-		}
-		
+	{	
+		eventHandler();
+	
 		auto KE_timer_start = std::chrono::steady_clock::now();
 		
 		//all is happening here
@@ -77,6 +72,22 @@ void Session::drawFrame()
 void Session::levelTick()
 {
 	current_level->level_tick(&mouse_position, is_left_mouse_pressed);
+}
+
+void Session::eventHandler()
+{
+	sf::Event event;
+	while (main_window.pollEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+			main_window.close();
+		if (event.type == sf::Event::Resized)
+		{
+			// update the view to the new size of the window
+			sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
+			main_window.setView(sf::View(visibleArea));
+		}
+	}
 }
 
 void Session::mouseHandler()

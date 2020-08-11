@@ -2,6 +2,8 @@ CFLAGS=-c -Wall
 CC=g++
 SFML=-lsfml-graphics -lsfml-window -lsfml-system
 
+C_PATH = ../game_test_compiled/
+
 debug: dcompile
 	gdbgui run
 dcompile: dmain.o dSession.o dLevel.o
