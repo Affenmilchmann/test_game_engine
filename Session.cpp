@@ -6,6 +6,8 @@ Session::Session(int w, int h)
 	windowInit(w, h);
 	countersInit();
 	fontsInit();
+	eh = new ErrorHandler(pixel_font);
+	current_level = new Level(eh, seconds);
 }
 
 ////////////////////////////////////////////
@@ -34,19 +36,26 @@ void Session::mainLoop()
 //inner loop, which drives all gamestuff//
 //////////////////////////////////////////
 void Session::loop()
-{
+{	
+	//sleep so every tick is limited by base_ticks_time
 	sleep();
+	//counting ticks amount
 	tickAmountCount();
+	//counting FPS
 	fpsCount();
 	
+	//handling the mouse, i guess
 	mouseHandler();
 	
+	//drawing frame if fps border allows
 	if (frame_passed_time_count >= 1.0 / FPS_border)
-	{
 		drawFrame();
-	}
 	
+	//level physics (raw)
 	levelTick();
+	
+	//eh is a HandlerUpdate object. Here it checks if error message must be erased (because of time)
+	eh->errorHandlerUpdate(seconds);
 }
 
 ///////////////////
@@ -61,9 +70,12 @@ void Session::drawFrame()
 	//Clearing da screen
 	main_window.clear(sf::Color::Black);
 	
-	//Draw
+	//Draw level objects
 	current_level->drawLevelFrame(&main_window);
+	
+	//Draw Debug and Errors
 	showDebug();
+	eh->drawErrors(&main_window); //here eh draws error messages
 	
 	//display frame
 	main_window.display();
@@ -83,7 +95,6 @@ void Session::eventHandler()
 			main_window.close();
 		if (event.type == sf::Event::Resized)
 		{
-			// update the view to the new size of the window
 			sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
 			main_window.setView(sf::View(visibleArea));
 		}
@@ -99,11 +110,6 @@ void Session::mouseHandler()
 
 void Session::showDebug()
 {
-	main_window.draw(mouse_coords_label);
-	main_window.draw(fps_label);
-	main_window.draw(timer_label);
-	main_window.draw(tick_time_label);
-	
 	//Setting values
 	if (one_second_timer > 1.0f) 
 		fps_label.setString("FPS: " + std::to_string(fps));
@@ -114,6 +120,12 @@ void Session::showDebug()
 	timer_label.setString("Time(s): " + std::to_string(one_second_timer + seconds));
 	
 	tick_time_label.setString("Tick time(s): " + std::to_string(tick_time));
+	
+	//draw Debug info (it is written here because i dont want it to be independent from fps
+	main_window.draw(mouse_coords_label);
+	main_window.draw(fps_label);
+	main_window.draw(timer_label);
+	main_window.draw(tick_time_label);
 }
 
 void Session::sleep() 
@@ -214,4 +226,5 @@ void Session::windowInit(int w, int h)
 Session::~Session()
 {
 	delete current_level;
+	delete eh;
 }

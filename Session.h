@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Level.h"
+#include "ErrorHandler.h"
 
 #include <list>
 #include <chrono>
@@ -24,7 +25,7 @@ private:
 	sf::Vector2i mouse_position;
 	bool is_left_mouse_pressed = false;
 	//Level
-	Level *current_level = new Level();
+	Level *current_level;
 	
 	//debug
 	sf::Text fps_label;
@@ -33,6 +34,8 @@ private:
 	sf::Text tick_time_label;
 	
 	sf::Font pixel_font;
+	
+	ErrorHandler *eh;
 	
 	//Settings
 	int FPS_border = 60;

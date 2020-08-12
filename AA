@@ -1,4 +1,4 @@
-CFLAGS=-c -Wall
+CFLAGS=-std=c++17 -c -Wall
 CC=g++
 SFML=-lsfml-graphics -lsfml-window -lsfml-system
 
@@ -6,8 +6,8 @@ C_PATH = ../game_test_compiled/
 
 debug: dcompile
 	gdbgui run
-dcompile: dmain.o dSession.o dLevel.o
-	$(CC) dmain.o dSession.o dLevel.o -o run $(SFML)
+dcompile: dmain.o dSession.o dLevel.o dErrorHandler.o
+	$(CC) dmain.o dSession.o dLevel.o dErrorHandler.o -o run $(SFML)
 
 dmain.o: main.cpp
 	$(CC) -g $(CFLAGS) main.cpp -o dmain.o
@@ -17,6 +17,9 @@ dSession.o: Session.cpp
 	
 dLevel.o: Level.cpp
 	$(CC) -g $(CFLAGS) Level.cpp -o dLevel.o
+	
+dErrorHandler.o: ErrorHandler.cpp
+	$(CC) -g $(CFLAGS) ErrorHandler.cpp -o dErrorHandler.o
 
 
 
@@ -24,8 +27,8 @@ dLevel.o: Level.cpp
 run: compile
 	./run
 	
-compile: main.o Session.o Level.o
-	$(CC) main.o Session.o Level.o -o run $(SFML)
+compile: main.o Session.o Level.o ErrorHandler.o
+	$(CC) main.o Session.o Level.o ErrorHandler.o -o run $(SFML)
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
@@ -35,6 +38,9 @@ Session.o: Session.cpp
 	
 Level.o: Level.cpp
 	$(CC) $(CFLAGS) Level.cpp
+	
+ErrorHandler.o: ErrorHandler.cpp
+	$(CC) $(CFLAGS) ErrorHandler.cpp
 	
 clean:
 	rm -rf *.o main
