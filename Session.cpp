@@ -1,5 +1,6 @@
 #include "Session.h"
 
+//Test
 //Constructor and initialization
 Session::Session(int w, int h) 
 {
